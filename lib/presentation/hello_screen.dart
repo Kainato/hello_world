@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+
 import '../core/hello_repository.dart';
 import 'hello_text.dart';
 
@@ -23,42 +23,44 @@ class _HelloScreenState extends State<HelloScreen>
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.forward(from: 0);
-          setState(() {
-            index = (index + 1) % HelloRepository.hellos.length;
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3))
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              controller.forward(from: 0);
+              setState(() {
+                index = (index + 1) % HelloRepository.hellos.length;
+              });
+            }
           });
-        }
-      });
 
     fade = TweenSequence([
       TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        tween: Tween(
+          begin: 0.0,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
         weight: 40,
       ),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 20),
       TweenSequenceItem(
-        tween: ConstantTween(1.0),
-        weight: 20,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 0.0)
-            .chain(CurveTween(curve: Curves.easeInCubic)),
+        tween: Tween(
+          begin: 1.0,
+          end: 0.0,
+        ).chain(CurveTween(curve: Curves.easeInCubic)),
         weight: 40,
       ),
     ]).animate(controller);
 
-    scale = Tween(begin: 0.96, end: 1.0)
-        .chain(CurveTween(curve: Curves.easeOut))
-        .animate(controller);
+    scale = Tween(
+      begin: 0.96,
+      end: 1.0,
+    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
 
-    slide = Tween(begin: const Offset(0, 0.05), end: Offset.zero)
-        .chain(CurveTween(curve: Curves.easeOut))
-        .animate(controller);
+    slide = Tween(
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
 
     controller.forward();
   }
@@ -72,7 +74,7 @@ class _HelloScreenState extends State<HelloScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: HelloRepository.colors[index],
       body: Center(
         child: AnimatedBuilder(
           animation: controller,
