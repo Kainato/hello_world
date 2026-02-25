@@ -53,3 +53,9 @@ app.*.map.json
 .web/
 .windows/
 .build/
+
+# Signing keys
+android/key.properties
+*.jks
+*.p12
+*.p8
