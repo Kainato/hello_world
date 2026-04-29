@@ -54,3 +54,13 @@ app.*.map.json
 .windows/
 .build/
 .idx/
+
+# Signing keys
+android/key.properties
+*.jks
+*.p12
+*.p8
+
+# Security sensitive files
+android/app/src/main/assets/adi-registration.properties
+android/key.properties
