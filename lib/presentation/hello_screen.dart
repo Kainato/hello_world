@@ -21,7 +21,17 @@ class _HelloScreenState extends State<HelloScreen>
 
   int index = 0;
   int backgroundIndex = 0;
+  int animationType = 0;
   final Random random = Random();
+
+  static const int slideUpAnimation = 0;
+  static const int slideDownAnimation = 1;
+  static const int slideLeftAnimation = 2;
+  static const int slideRightAnimation = 3;
+  static const int slideBottomLeftAnimation = 4;
+  static const int slideTopRightAnimation = 5;
+  static const int slideTopLeftAnimation = 6;
+  static const int slideBottomRightAnimation = 7;
 
   int _getRandomBackgroundIndex() {
     int newIndex;
@@ -29,6 +39,49 @@ class _HelloScreenState extends State<HelloScreen>
       newIndex = random.nextInt(HelloRepository.colors.length);
     } while (newIndex == index);
     return newIndex;
+  }
+
+  Animation<Offset> _createRandomSlideAnimation() {
+    animationType = random.nextInt(8);
+
+    return switch (animationType) {
+      slideUpAnimation => Tween(
+        begin: const Offset(0, 0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideDownAnimation => Tween(
+        begin: const Offset(0, -0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideLeftAnimation => Tween(
+        begin: const Offset(0.15, 0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideRightAnimation => Tween(
+        begin: const Offset(-0.15, 0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideBottomLeftAnimation => Tween(
+        begin: const Offset(0.12, -0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideTopRightAnimation => Tween(
+        begin: const Offset(-0.12, 0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideTopLeftAnimation => Tween(
+        begin: const Offset(0.12, 0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      slideBottomRightAnimation => Tween(
+        begin: const Offset(-0.12, -0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+      _ => Tween(
+        begin: const Offset(0, 0.1),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOut)),
+    }.animate(controller);
   }
 
   @override
@@ -43,6 +96,7 @@ class _HelloScreenState extends State<HelloScreen>
               setState(() {
                 index = random.nextInt(HelloRepository.hellos.length);
                 backgroundIndex = _getRandomBackgroundIndex();
+                slide = _createRandomSlideAnimation();
               });
             }
           });
@@ -70,10 +124,7 @@ class _HelloScreenState extends State<HelloScreen>
       end: 1.0,
     ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
 
-    slide = Tween(
-      begin: const Offset(0, 0.05),
-      end: Offset.zero,
-    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
+    slide = _createRandomSlideAnimation();
 
     controller.forward();
   }
