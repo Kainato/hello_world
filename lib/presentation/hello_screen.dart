@@ -18,6 +18,7 @@ class _HelloScreenState extends State<HelloScreen>
   late Animation<double> fade;
   late Animation<double> scale;
   late Animation<Offset> slide;
+  late Animation<double> rotation;
 
   int index = 0;
   int backgroundIndex = 0;
@@ -141,6 +142,20 @@ class _HelloScreenState extends State<HelloScreen>
       end: 1.5,
     ).chain(CurveTween(curve: Curves.elasticOut)).animate(controller);
 
+    rotation = TweenSequence([
+      TweenSequenceItem(
+        tween: ConstantTween(0.0), // Sem rotação enquanto se mexe
+        weight: 50, // 50% do tempo total
+      ),
+      TweenSequenceItem(
+        tween: Tween(
+          begin: 0.0,
+          end: 2.0 * 3.14159, // Uma volta completa (2π radianos)
+        ).chain(CurveTween(curve: Curves.linear)),
+        weight: 50, // 50% do tempo restante
+      ),
+    ]).animate(controller);
+
     slide = _createRandomSlideAnimation();
 
     controller.forward();
@@ -164,6 +179,7 @@ class _HelloScreenState extends State<HelloScreen>
               animation: controller,
               builder: (context, child) {
                 return HelloText(
+                  key: ValueKey(index),
                   text: HelloRepository.hellos[index].label,
                   fade: fade,
                   scale: scale,
