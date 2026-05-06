@@ -18,10 +18,21 @@ class _HelloScreenState extends State<HelloScreen>
   late Animation<double> fade;
   late Animation<double> scale;
   late Animation<Offset> slide;
+  late Animation<double> rotation;
 
   int index = 0;
   int backgroundIndex = 0;
+  int animationType = 0;
   final Random random = Random();
+
+  static const int slideUpAnimation = 0;
+  static const int slideDownAnimation = 1;
+  static const int slideLeftAnimation = 2;
+  static const int slideRightAnimation = 3;
+  static const int slideBottomLeftAnimation = 4;
+  static const int slideTopRightAnimation = 5;
+  static const int slideTopLeftAnimation = 6;
+  static const int slideBottomRightAnimation = 7;
 
   int _getRandomBackgroundIndex() {
     int newIndex;
@@ -31,18 +42,79 @@ class _HelloScreenState extends State<HelloScreen>
     return newIndex;
   }
 
+  Curve _getRandomCurve() {
+    final curves = [
+      Curves.elasticOut,
+      Curves.elasticInOut,
+      Curves.bounceOut,
+      Curves.bounceInOut,
+      Curves.easeOutBack,
+      Curves.easeOutExpo,
+      Curves.easeOutCirc,
+      Curves.fastOutSlowIn,
+      Curves.easeInOutBack,
+      Curves.decelerate,
+    ];
+    return curves[random.nextInt(curves.length)];
+  }
+
+  Animation<Offset> _createRandomSlideAnimation() {
+    animationType = random.nextInt(8);
+    final curve = _getRandomCurve();
+
+    return switch (animationType) {
+      slideUpAnimation => Tween(
+        begin: const Offset(0, 0.3),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideDownAnimation => Tween(
+        begin: const Offset(0, -0.3),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideLeftAnimation => Tween(
+        begin: const Offset(0.4, 0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideRightAnimation => Tween(
+        begin: const Offset(-0.4, 0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideBottomLeftAnimation => Tween(
+        begin: const Offset(0.35, -0.25),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideTopRightAnimation => Tween(
+        begin: const Offset(-0.35, 0.25),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideTopLeftAnimation => Tween(
+        begin: const Offset(0.35, 0.25),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      slideBottomRightAnimation => Tween(
+        begin: const Offset(-0.35, -0.25),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+      _ => Tween(
+        begin: const Offset(0, 0.3),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)),
+    }.animate(controller);
+  }
+
   @override
   void initState() {
     super.initState();
 
     controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               controller.forward(from: 0);
               setState(() {
                 index = random.nextInt(HelloRepository.hellos.length);
                 backgroundIndex = _getRandomBackgroundIndex();
+                slide = _createRandomSlideAnimation();
               });
             }
           });
@@ -66,14 +138,25 @@ class _HelloScreenState extends State<HelloScreen>
     ]).animate(controller);
 
     scale = Tween(
-      begin: 0.96,
-      end: 1.0,
-    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
+      begin: 0.4,
+      end: 1.5,
+    ).chain(CurveTween(curve: Curves.elasticOut)).animate(controller);
 
-    slide = Tween(
-      begin: const Offset(0, 0.05),
-      end: Offset.zero,
-    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
+    rotation = TweenSequence([
+      TweenSequenceItem(
+        tween: ConstantTween(0.0), // Sem rotação enquanto se mexe
+        weight: 50, // 50% do tempo total
+      ),
+      TweenSequenceItem(
+        tween: Tween(
+          begin: 0.0,
+          end: 2.0 * 3.14159, // Uma volta completa (2π radianos)
+        ).chain(CurveTween(curve: Curves.linear)),
+        weight: 50, // 50% do tempo restante
+      ),
+    ]).animate(controller);
+
+    slide = _createRandomSlideAnimation();
 
     controller.forward();
   }
@@ -96,6 +179,7 @@ class _HelloScreenState extends State<HelloScreen>
               animation: controller,
               builder: (context, child) {
                 return HelloText(
+                  key: ValueKey(index),
                   text: HelloRepository.hellos[index].label,
                   fade: fade,
                   scale: scale,
