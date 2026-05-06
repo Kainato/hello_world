@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../core/hello_repository.dart';
@@ -18,18 +20,29 @@ class _HelloScreenState extends State<HelloScreen>
   late Animation<Offset> slide;
 
   int index = 0;
+  int backgroundIndex = 0;
+  final Random random = Random();
+
+  int _getRandomBackgroundIndex() {
+    int newIndex;
+    do {
+      newIndex = random.nextInt(HelloRepository.colors.length);
+    } while (newIndex == index);
+    return newIndex;
+  }
 
   @override
   void initState() {
     super.initState();
 
     controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3))
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               controller.forward(from: 0);
               setState(() {
-                index = (index + 1) % HelloRepository.hellos.length;
+                index = random.nextInt(HelloRepository.hellos.length);
+                backgroundIndex = _getRandomBackgroundIndex();
               });
             }
           });
@@ -74,19 +87,24 @@ class _HelloScreenState extends State<HelloScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HelloRepository.colors[index],
-      body: Center(
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: (context, child) {
-            return HelloText(
-              text: HelloRepository.hellos[index],
-              fade: fade,
-              scale: scale,
-              slide: slide,
-            );
-          },
-        ),
+      backgroundColor: HelloRepository.colors[backgroundIndex],
+      body: Stack(
+        children: <Widget>[
+          Container(color: Colors.black.withAlpha(220)),
+          Center(
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, child) {
+                return HelloText(
+                  text: HelloRepository.hellos[index].label,
+                  fade: fade,
+                  scale: scale,
+                  slide: slide,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
