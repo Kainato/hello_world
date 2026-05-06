@@ -41,46 +41,63 @@ class _HelloScreenState extends State<HelloScreen>
     return newIndex;
   }
 
+  Curve _getRandomCurve() {
+    final curves = [
+      Curves.elasticOut,
+      Curves.elasticInOut,
+      Curves.bounceOut,
+      Curves.bounceInOut,
+      Curves.easeOutBack,
+      Curves.easeOutExpo,
+      Curves.easeOutCirc,
+      Curves.fastOutSlowIn,
+      Curves.easeInOutBack,
+      Curves.decelerate,
+    ];
+    return curves[random.nextInt(curves.length)];
+  }
+
   Animation<Offset> _createRandomSlideAnimation() {
     animationType = random.nextInt(8);
+    final curve = _getRandomCurve();
 
     return switch (animationType) {
       slideUpAnimation => Tween(
-        begin: const Offset(0, 0.1),
+        begin: const Offset(0, 0.3),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideDownAnimation => Tween(
-        begin: const Offset(0, -0.1),
+        begin: const Offset(0, -0.3),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideLeftAnimation => Tween(
-        begin: const Offset(0.15, 0),
+        begin: const Offset(0.4, 0),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideRightAnimation => Tween(
-        begin: const Offset(-0.15, 0),
+        begin: const Offset(-0.4, 0),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideBottomLeftAnimation => Tween(
-        begin: const Offset(0.12, -0.1),
+        begin: const Offset(0.35, -0.25),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideTopRightAnimation => Tween(
-        begin: const Offset(-0.12, 0.1),
+        begin: const Offset(-0.35, 0.25),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideTopLeftAnimation => Tween(
-        begin: const Offset(0.12, 0.1),
+        begin: const Offset(0.35, 0.25),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       slideBottomRightAnimation => Tween(
-        begin: const Offset(-0.12, -0.1),
+        begin: const Offset(-0.35, -0.25),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
       _ => Tween(
-        begin: const Offset(0, 0.1),
+        begin: const Offset(0, 0.3),
         end: Offset.zero,
-      ).chain(CurveTween(curve: Curves.easeOut)),
+      ).chain(CurveTween(curve: curve)),
     }.animate(controller);
   }
 
@@ -89,7 +106,7 @@ class _HelloScreenState extends State<HelloScreen>
     super.initState();
 
     controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               controller.forward(from: 0);
@@ -120,9 +137,9 @@ class _HelloScreenState extends State<HelloScreen>
     ]).animate(controller);
 
     scale = Tween(
-      begin: 0.96,
-      end: 1.0,
-    ).chain(CurveTween(curve: Curves.easeOut)).animate(controller);
+      begin: 0.4,
+      end: 1.5,
+    ).chain(CurveTween(curve: Curves.elasticOut)).animate(controller);
 
     slide = _createRandomSlideAnimation();
 
