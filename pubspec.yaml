@@ -17,3 +17,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+scripts:
+  build: flutter build web
+  setup_folder: mkdir docs
+  copy_files: cp -R build/web/* docs/
