@@ -39,8 +39,20 @@ Criar um aplicativo que demonstre **animações, transições e efeitos visuais*
 git clone https://github.com/seu-usuario/flutter-animations-ola-mundo.git
 ```
 
-2. Acesse a pasta do projeto:cd flutter-animations-ola-mundo
+2. Acesse a pasta do projeto:
 
-3. Instale as dependências:flutter pub get
+```
+cd flutter-animations-ola-mundo
+```
 
-4. Execute o app: flutter run
+3. Instale as dependências:
+
+```
+flutter pub get
+```
+
+4. Execute o app: 
+
+```
+flutter run
+```
