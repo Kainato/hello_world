@@ -2,7 +2,7 @@
 
 Este projeto foi criado para explorar e brincar com **animações em Flutter**.
 
-A ideia inicial é simples, mas divertida: exibir vários "Olá Mundo" em diferentes línguas, alternando a cada alguns segundos com transições animadas e personalizadas.
+A ideia inicial é simples: exibir vários "Olá Mundo" em diferentes línguas, alternando a cada alguns segundos com transições animadas e personalizadas.
 
 ---
 
