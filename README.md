@@ -41,18 +41,18 @@ git clone https://github.com/seu-usuario/flutter-animations-ola-mundo.git
 
 2. Acesse a pasta do projeto:
 
-```
+```bash
 cd flutter-animations-ola-mundo
 ```
 
 3. Instale as dependências:
 
-```
+```bash
 flutter pub get
 ```
 
 4. Execute o app: 
 
-```
+```bash
 flutter run
 ```
