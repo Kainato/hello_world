@@ -20,7 +20,7 @@ Você receberá uma resposta em até 48 horas.
 | Principal  | Suportada (desenvolvimento) | Contínuo   |
 | Anteriores | Não suportadas              | -          |
 
-**Nota:** Apenas a versão mais recente (branch `master`) recebe atualizações de segurança. Recomendamos manter-se atualizado com a versão mais recente.
+**Nota:** Apenas a versão mais recente (branch `main`) recebe atualizações de segurança. Recomendamos manter-se atualizado com a versão mais recente.
 
 ## Melhores Práticas de Segurança
 
