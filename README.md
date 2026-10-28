@@ -1,4 +1,4 @@
-# Olá Mundo! 🌍
+# 🌎 Olá Mundo!
 
 Este projeto foi criado para explorar e brincar com **animações em Flutter**.
 
